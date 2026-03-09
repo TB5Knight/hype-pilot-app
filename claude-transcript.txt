@@ -1,0 +1,213 @@
+
+╭─── Claude Code v2.1.71 ──────────────────────────────────────────────────────╮
+│                                   │ Tips for getting started                 │
+│   Welcome back Taylor Burdgess!   │ Run /init to create a CLAUDE.md file wi… │
+│                                   │ ──────────────────────────────────────── │
+│             ▗ ▗   ▖ ▖             │ Recent activity                          │
+│                                   │ No recent activity                       │
+│               ▘▘ ▝▝               │                                          │
+│                                   │                                          │
+│      Sonnet 4.6 · Claude Pro      │                                          │
+│         ~/hype-pilot-app          │                                          │
+╰──────────────────────────────────────────────────────────────────────────────╯
+
+❯ I am building a web project called Hype Pilot, a task planner web app built   
+with React.Core features: Add tasks with title, category, due date, and         
+optional description, Calendar-style view to display upcoming deadlines,        
+Priority labels for tasks (Top Priority / Mid Priority / Low Priority), Ability 
+ to mark tasks as completed,Reminder alerts for tasks that are due soon,Can you 
+ create a step-by-step development plan for building these features in React?   
+Please include: 1. The components I should create, 2. The order I should build  
+the features, 3. How localStorage should be structured, 4. Any helpful React    
+concepts (state, props, hooks), Keep the plan simple enough for a project but   
+structured                                                                      
+
+⏺ Searched for 1 pattern, read 1 file (ctrl+o to expand)
+
+⏺ You have a fresh Create React App setup with React 19. Here's your complete
+  development plan for Hype Pilot:
+
+  ---
+  Hype Pilot — Development Plan
+
+  Project File Structure
+
+  src/
+    components/
+      TaskForm.js        — Add/edit task form
+      TaskCard.js        — Single task display
+      TaskList.js        — Renders list of TaskCards
+      CalendarView.js    — Calendar-style deadline view
+      ReminderBanner.js  — Alert for tasks due soon
+      FilterBar.js       — Filter by category/priority
+    hooks/
+      useTasks.js        — Custom hook for task state + localStorage
+    utils/
+      dateHelpers.js     — Date comparison/formatting utilities
+    App.js               — Root layout + view switching
+
+  ---
+  Phase 1 — Data Foundation (Build First)
+
+  Before any UI, define your task shape and localStorage logic.
+
+  useTasks.js custom hook
+
+  This is the backbone of the whole app. It manages state and persistence.
+
+  // What a task object looks like
+  {
+    id: "uuid-or-Date.now()",
+    title: "Finish report",
+    category: "Work",
+    priority: "Top Priority",     // "Top Priority" | "Mid Priority" | "Low 
+  Priority"
+    dueDate: "2026-03-15",        // ISO string YYYY-MM-DD
+    description: "",              // optional
+    completed: false,
+    createdAt: "2026-03-08T..."
+  }
+
+  localStorage structure
+
+  // Key: "hype-pilot-tasks"
+  // Value: JSON array of task objects
+  localStorage.setItem("hype-pilot-tasks", JSON.stringify(tasks));
+
+  React concepts used: useState, useEffect
+
+  // useTasks.js pattern
+  const [tasks, setTasks] = useState(() => {
+    const saved = localStorage.getItem("hype-pilot-tasks");
+    return saved ? JSON.parse(saved) : [];
+  });
+
+  useEffect(() => {
+    localStorage.setItem("hype-pilot-tasks", JSON.stringify(tasks));
+  }, [tasks]);
+
+  The useState initializer function () => {...} runs only once — this is called
+  lazy initialization and is the correct pattern for reading from localStorage.
+
+  ---
+  Phase 2 — Core Task CRUD
+
+  Order to build:
+
+  1. TaskForm.js — Controlled form with fields: title, category (dropdown or
+  text), due date (<input type="date">), priority (select), description
+  (textarea). Uses useState for each field. Calls an onAddTask(task) prop when
+  submitted.
+  2. TaskCard.js — Displays one task. Shows title, category badge, priority
+  label, due date, and a checkbox to mark complete. Accepts task, onComplete,
+  onDelete as props.
+  3. TaskList.js — Maps over the tasks array and renders a <TaskCard> for each.
+  Accepts tasks array as a prop.
+  4. App.js — Pulls it all together using useTasks, renders <TaskForm> and
+  <TaskList>.
+
+  React concepts used: controlled components (value + onChange), props, lifting
+  state up, .map() with key prop
+
+  ---
+  Phase 3 — Priority Labels + Filtering
+
+  FilterBar.js — Buttons or a dropdown to filter by:
+  - Priority: Top / Mid / Low / All
+  - Category: dynamic list from existing tasks
+  - Status: Active / Completed / All
+
+  In App.js, derive filteredTasks from the full tasks array using useMemo or
+  inline .filter():
+
+  const filteredTasks = tasks.filter(task =>
+    (filter.priority === "All" || task.priority === filter.priority) &&
+    (filter.status === "All" || (filter.status === "Completed") ===
+  task.completed)
+  );
+
+  React concepts used: derived state, useState for filter values, conditional
+  rendering
+
+  ---
+  Phase 4 — Calendar View
+
+  CalendarView.js — Groups tasks by due date and displays them in a weekly or
+  monthly grid.
+
+  Strategy: use a simple approach first — group tasks by date using reduce:
+
+  const tasksByDate = tasks.reduce((acc, task) => {
+    const date = task.dueDate;
+    if (!acc[date]) acc[date] = [];
+    acc[date].push(task);
+    return acc;
+  }, {});
+
+  Then render a grid of the next 30 days, showing task counts or titles on their
+   due date.
+
+  dateHelpers.js — Helper functions to keep logic clean:
+  export const isToday = (dateStr) => ...
+  export const isDueSoon = (dateStr, days = 3) => ...
+  export const formatDate = (dateStr) => ...
+
+  React concepts used: useMemo for expensive date calculations, array/object
+  transformations
+
+  ---
+  Phase 5 — Reminders
+
+  ReminderBanner.js — Displays a non-intrusive banner at the top listing tasks
+  due within the next 3 days (and not yet completed).
+
+  Filter logic:
+  const dueSoon = tasks.filter(t =>
+    !t.completed && isDueSoon(t.dueDate, 3)
+  );
+
+  For browser notifications (optional upgrade): use useEffect +
+  Notification.requestPermission() on app load. Only show a notification once
+  per session using a useRef flag.
+
+  React concepts used: useEffect, useRef, conditional rendering
+
+  ---
+  React Concepts Summary
+
+  ┌────────────────────┬────────────────────────────────────────────────┐
+  │      Concept       │                Where It's Used                 │
+  ├────────────────────┼────────────────────────────────────────────────┤
+  │ useState           │ Task list, form fields, filters, view toggle   │
+  ├────────────────────┼────────────────────────────────────────────────┤
+  │ useEffect          │ Syncing to localStorage, notification triggers │
+  ├────────────────────┼────────────────────────────────────────────────┤
+  │ useMemo            │ Calendar grouping, filtered task lists         │
+  ├────────────────────┼────────────────────────────────────────────────┤
+  │ useRef             │ Tracking if notification was already shown     │
+  ├────────────────────┼────────────────────────────────────────────────┤
+  │ Lazy useState init │ Loading from localStorage on first render      │
+  ├────────────────────┼────────────────────────────────────────────────┤
+  │ Lifting state up   │ useTasks hook owned by App, passed down        │
+  ├────────────────────┼────────────────────────────────────────────────┤
+  │ Controlled inputs  │ All form fields                                │
+  ├────────────────────┼────────────────────────────────────────────────┤
+  │ Props + callbacks  │ onAddTask, onComplete, onDelete                │
+  └────────────────────┴────────────────────────────────────────────────┘
+
+  ---
+  Recommended Build Order
+
+  Phase 1 → useTasks hook + localStorage
+  Phase 2 → TaskForm → TaskCard → TaskList → wire up in App.js
+  Phase 3 → FilterBar + priority display
+  Phase 4 → CalendarView + dateHelpers
+  Phase 5 → ReminderBanner
+
+  Build and test each phase before moving to the next. This keeps the app
+  functional at every step and makes bugs easy to isolate.
+
+  ---
+  Want me to start writing any of these files?
+
+✻ Cogitated for 39s
