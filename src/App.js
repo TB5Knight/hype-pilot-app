@@ -1,18 +1,16 @@
 import './App.css';
+import useTasks from './hooks/useTasks';
+import TaskForm from './components/TaskForm';
+import TaskList from './components/TaskList';
 
 function App() {
+  const { tasks, addTask, deleteTask, toggleComplete } = useTasks();
+
   return (
     <div className="App">
       <h1>Hype Pilot</h1>
-
-      <p>
-        Hype Pilot is a task planner web application designed to help users
-        organize tasks, track deadlines, and manage daily productivity.The app allows 
-        users to create tasks, view upcoming deadlines  in a calendar layout,
-         prioritize important work, and monitor their progress. 
-      </p>
-
-    
+      <TaskForm onAddTask={addTask} />
+      <TaskList tasks={tasks} onComplete={toggleComplete} onDelete={deleteTask} />
     </div>
   );
 }
