@@ -1,9 +1,3 @@
-const PRIORITY_CLASS = {
-  'Top Priority': 'priority-top',
-  'Mid Priority': 'priority-mid',
-  'Low Priority': 'priority-low',
-};
-
 const PRIORITY_BADGE = {
   'Top Priority': 'badge-top',
   'Mid Priority': 'badge-mid',

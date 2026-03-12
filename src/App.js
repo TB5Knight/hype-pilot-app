@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import './App.css';
 import useTasks from './hooks/useTasks';
 import TaskForm from './components/TaskForm';
@@ -28,6 +28,12 @@ function App() {
     () => [...new Set(tasks.map(t => t.category).filter(Boolean))],
     [tasks]
   );
+
+  useEffect(() => {
+    if (filters.category !== 'All' && !categories.includes(filters.category)) {
+      setFilters(prev => ({ ...prev, category: 'All' }));
+    }
+  }, [categories, filters.category]);
 
   const filteredTasks = useMemo(() => {
     return tasks.filter(task => {
