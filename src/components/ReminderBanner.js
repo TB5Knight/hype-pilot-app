@@ -4,7 +4,7 @@ import { isDueSoon, formatDate } from '../utils/dateHelpers';
 export default function ReminderBanner({ tasks }) {
   const notifiedRef = useRef(false);
 
-  const dueSoonTasks = tasks.filter(t => !t.completed && isDueSoon(t.dueDate, 3));
+  const dueSoonTasks = tasks.filter(t => !t.completed && t.dueDate && isDueSoon(t.dueDate, 3));
 
   useEffect(() => {
     if (notifiedRef.current) return;

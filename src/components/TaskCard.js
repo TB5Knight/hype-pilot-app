@@ -49,7 +49,7 @@ export default function TaskCard({ task, onComplete, onDelete }) {
       )}
 
       <div className="task-footer">
-        <button className="btn-danger" onClick={() => onDelete(id)}>Delete</button>
+        <button type="button" className="btn-danger" onClick={() => onDelete(id)}>Delete</button>
       </div>
     </div>
   );
