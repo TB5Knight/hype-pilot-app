@@ -4,6 +4,7 @@ import useTasks from './hooks/useTasks';
 import TaskForm from './components/TaskForm';
 import TaskList from './components/TaskList';
 import FilterBar from './components/FilterBar';
+import CalendarView from './components/CalendarView';
 
 const DEFAULT_FILTERS = { priority: 'All', category: 'All', status: 'All' };
 
@@ -40,6 +41,7 @@ function App() {
         categories={categories}
       />
       <TaskList tasks={filteredTasks} onComplete={toggleComplete} onDelete={deleteTask} />
+      <CalendarView tasks={tasks} />
     </div>
   );
 }
