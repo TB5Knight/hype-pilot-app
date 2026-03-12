@@ -5,6 +5,7 @@ import TaskForm from './components/TaskForm';
 import TaskList from './components/TaskList';
 import FilterBar from './components/FilterBar';
 import CalendarView from './components/CalendarView';
+import ReminderBanner from './components/ReminderBanner';
 
 const DEFAULT_FILTERS = { priority: 'All', category: 'All', status: 'All' };
 
@@ -34,6 +35,7 @@ function App() {
   return (
     <div className="App">
       <h1>Hype Pilot</h1>
+      <ReminderBanner tasks={tasks} />
       <TaskForm onAddTask={addTask} />
       <FilterBar
         filters={filters}
