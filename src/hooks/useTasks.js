@@ -18,7 +18,7 @@ export default function useTasks() {
 
   function addTask({ title, category, priority, dueDate, description = '' }) {
     const newTask = {
-      id: crypto.randomUUID(),
+      id: Date.now().toString(36) + Math.random().toString(36).slice(2),
       title,
       category,
       priority,
