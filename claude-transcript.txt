@@ -60,8 +60,7 @@ structured
     id: "uuid-or-Date.now()",
     title: "Finish report",
     category: "Work",
-    priority: "Top Priority",     // "Top Priority" | "Mid Priority" | "Low 
-  Priority"
+    priority: "Top Priority",     // "Top Priority" | "Mid Priority" | "Low Priority"
     dueDate: "2026-03-15",        // ISO string YYYY-MM-DD
     description: "",              // optional
     completed: false,
