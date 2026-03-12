@@ -24,9 +24,9 @@ function addTaskViaUI({ title = 'Test Task', priority = 'Mid Priority', dueDate 
 
 describe('App integration', () => {
   describe('view navigation', () => {
-    test('defaults to Tasks view', () => {
+    test('defaults to Dashboard view', () => {
       render(<App />);
-      expect(screen.getByRole('heading', { name: /my tasks/i })).toBeInTheDocument();
+      expect(screen.getByRole('heading', { name: /good/i })).toBeInTheDocument();
     });
 
     test('switches to Add Task view', () => {
@@ -43,8 +43,8 @@ describe('App integration', () => {
 
     test('nav button shows active class for current view', () => {
       render(<App />);
-      const tasksBtn = within(getTopNav()).getByRole('button', { name: 'Tasks' });
-      expect(tasksBtn.className).toMatch(/active/);
+      const homeBtn = within(getTopNav()).getByRole('button', { name: 'Home' });
+      expect(homeBtn.className).toMatch(/active/);
     });
 
     test('submitting the form redirects back to Tasks view', () => {
@@ -92,8 +92,8 @@ describe('App integration', () => {
     test('bottom nav active button matches current view', () => {
       render(<App />);
       const bottomNav = document.querySelector('.bottom-nav');
-      const tasksBtn = within(bottomNav).getByRole('button', { name: /tasks/i });
-      expect(tasksBtn.className).toMatch(/active/);
+      const homeBtn = within(bottomNav).getByRole('button', { name: /home/i });
+      expect(homeBtn.className).toMatch(/active/);
     });
 
     test('clicking bottom nav button switches view', () => {

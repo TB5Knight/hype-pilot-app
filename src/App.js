@@ -6,19 +6,21 @@ import TaskList from './components/TaskList';
 import FilterBar from './components/FilterBar';
 import CalendarView from './components/CalendarView';
 import ReminderBanner from './components/ReminderBanner';
+import Dashboard from './components/Dashboard';
 
 const DEFAULT_FILTERS = { priority: 'All', category: 'All', status: 'All' };
 
 const VIEWS = [
-  { id: 'Tasks',    label: 'Tasks',    icon: '✓' },
-  { id: 'Add Task', label: 'Add Task', icon: '+' },
-  { id: 'Calendar', label: 'Calendar', icon: '▦' },
+  { id: 'Dashboard', label: 'Home',     icon: '⌂' },
+  { id: 'Tasks',     label: 'Tasks',    icon: '✓' },
+  { id: 'Add Task',  label: 'Add Task', icon: '+' },
+  { id: 'Calendar',  label: 'Calendar', icon: '▦' },
 ];
 
 function App() {
   const { tasks, addTask, deleteTask, toggleComplete } = useTasks();
   const [filters, setFilters] = useState(DEFAULT_FILTERS);
-  const [view, setView] = useState('Tasks');
+  const [view, setView] = useState('Dashboard');
 
   function handleFilterChange(name, value) {
     setFilters(prev => ({ ...prev, [name]: value }));
@@ -73,6 +75,10 @@ function App() {
       <main className="app-main">
         <ReminderBanner tasks={tasks} />
 
+        {view === 'Dashboard' && (
+          <Dashboard tasks={tasks} onNavigate={setView} />
+        )}
+
         {view === 'Add Task' && (
           <>
             <h2 className="section-heading">Add a New Task</h2>
@@ -100,7 +106,7 @@ function App() {
         )}
       </main>
 
-      {/* Mobile bottom tab bar (visible only on small screens via CSS) */}
+      {/* Mobile bottom tab bar */}
       <nav className="bottom-nav" aria-label="Mobile navigation">
         {VIEWS.map(v => (
           <button
