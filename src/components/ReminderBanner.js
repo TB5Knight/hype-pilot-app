@@ -33,7 +33,7 @@ export default function ReminderBanner({ tasks }) {
   if (dueSoonTasks.length === 0) return null;
 
   return (
-    <div role="alert" aria-live="polite">
+    <div className="reminder-banner" role="alert" aria-live="polite">
       <strong>Upcoming deadlines:</strong>
       <ul>
         {dueSoonTasks.map(task => (

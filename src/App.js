@@ -8,13 +8,20 @@ import CalendarView from './components/CalendarView';
 import ReminderBanner from './components/ReminderBanner';
 
 const DEFAULT_FILTERS = { priority: 'All', category: 'All', status: 'All' };
+const VIEWS = ['Tasks', 'Add Task', 'Calendar'];
 
 function App() {
   const { tasks, addTask, deleteTask, toggleComplete } = useTasks();
   const [filters, setFilters] = useState(DEFAULT_FILTERS);
+  const [view, setView] = useState('Tasks');
 
   function handleFilterChange(name, value) {
     setFilters(prev => ({ ...prev, [name]: value }));
+  }
+
+  function handleAddTask(task) {
+    addTask(task);
+    setView('Tasks');
   }
 
   const categories = useMemo(
@@ -33,17 +40,53 @@ function App() {
   }, [tasks, filters]);
 
   return (
-    <div className="App">
-      <h1>Hype Pilot</h1>
-      <ReminderBanner tasks={tasks} />
-      <TaskForm onAddTask={addTask} />
-      <FilterBar
-        filters={filters}
-        onFilterChange={handleFilterChange}
-        categories={categories}
-      />
-      <TaskList tasks={filteredTasks} onComplete={toggleComplete} onDelete={deleteTask} />
-      <CalendarView tasks={tasks} />
+    <div className="app-wrapper">
+      <nav className="navbar">
+        <div className="navbar-inner">
+          <span className="navbar-brand">Hype Pilot</span>
+          <div className="navbar-links">
+            {VIEWS.map(v => (
+              <button
+                key={v}
+                className={`nav-btn${view === v ? ' active' : ''}`}
+                onClick={() => setView(v)}
+              >
+                {v}
+              </button>
+            ))}
+          </div>
+        </div>
+      </nav>
+
+      <main className="app-main">
+        <ReminderBanner tasks={tasks} />
+
+        {view === 'Add Task' && (
+          <>
+            <h2 className="section-heading">Add a New Task</h2>
+            <TaskForm onAddTask={handleAddTask} />
+          </>
+        )}
+
+        {view === 'Tasks' && (
+          <>
+            <h2 className="section-heading">My Tasks</h2>
+            <FilterBar
+              filters={filters}
+              onFilterChange={handleFilterChange}
+              categories={categories}
+            />
+            <TaskList tasks={filteredTasks} onComplete={toggleComplete} onDelete={deleteTask} />
+          </>
+        )}
+
+        {view === 'Calendar' && (
+          <>
+            <h2 className="section-heading">Calendar</h2>
+            <CalendarView tasks={tasks} />
+          </>
+        )}
+      </main>
     </div>
   );
 }

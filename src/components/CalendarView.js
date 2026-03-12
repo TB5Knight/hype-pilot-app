@@ -1,6 +1,12 @@
 import { useMemo } from 'react';
 import { getNextDays, formatDate, isToday, isDueSoon } from '../utils/dateHelpers';
 
+const PRIORITY_ITEM_CLASS = {
+  'Top Priority': 'priority-top',
+  'Mid Priority': 'priority-mid',
+  'Low Priority': 'priority-low',
+};
+
 export default function CalendarView({ tasks }) {
   const days = useMemo(() => getNextDays(30), []);
 
@@ -14,50 +20,47 @@ export default function CalendarView({ tasks }) {
   }, [tasks]);
 
   return (
-    <div>
-      <h2>Next 30 Days</h2>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: '8px' }}>
+    <div className="calendar-section">
+      <div className="calendar-grid">
         {days.map(dateStr => {
           const dayTasks = tasksByDate[dateStr] || [];
           const today = isToday(dateStr);
           const soon = !today && isDueSoon(dateStr);
 
+          const cellClass = [
+            'calendar-cell',
+            today ? 'today' : '',
+            soon ? 'due-soon' : '',
+          ].filter(Boolean).join(' ');
+
           return (
-            <div
-              key={dateStr}
-              style={{
-                border: today ? '2px solid #333' : '1px solid #ccc',
-                borderRadius: '6px',
-                padding: '6px',
-                background: today ? '#eef' : soon ? '#fff8e1' : '#fff',
-                minHeight: '80px',
-              }}
-            >
-              <div style={{ fontWeight: today ? 'bold' : 'normal', fontSize: '0.75rem', marginBottom: '4px' }}>
+            <div key={dateStr} className={cellClass}>
+              <div className="calendar-date-label">
                 {formatDate(dateStr)}
-                {today && ' — Today'}
+                {today && <span className="today-badge">Today</span>}
               </div>
 
-              {dayTasks.length === 0 ? null : (
-                <ul style={{ margin: 0, padding: '0 0 0 12px', fontSize: '0.75rem' }}>
-                  {dayTasks.map(task => (
-                    <li
-                      key={task.id}
-                      style={{
-                        textDecoration: task.completed ? 'line-through' : 'none',
-                        color: task.priority === 'Top Priority' ? '#c00' : 'inherit',
-                      }}
-                    >
-                      {task.title}
-                    </li>
-                  ))}
-                </ul>
-              )}
-
               {dayTasks.length > 0 && (
-                <div style={{ fontSize: '0.7rem', color: '#666', marginTop: '2px' }}>
-                  {dayTasks.length} task{dayTasks.length !== 1 ? 's' : ''}
-                </div>
+                <>
+                  <ul className="calendar-task-list">
+                    {dayTasks.map(task => {
+                      const itemClass = [
+                        'calendar-task-item',
+                        PRIORITY_ITEM_CLASS[task.priority] || '',
+                        task.completed ? 'completed' : '',
+                      ].filter(Boolean).join(' ');
+
+                      return (
+                        <li key={task.id} className={itemClass} title={task.title}>
+                          {task.title}
+                        </li>
+                      );
+                    })}
+                  </ul>
+                  <div className="calendar-count">
+                    {dayTasks.length} task{dayTasks.length !== 1 ? 's' : ''}
+                  </div>
+                </>
               )}
             </div>
           );

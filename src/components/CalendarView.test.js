@@ -15,9 +15,9 @@ const tasks = [
 ];
 
 describe('CalendarView', () => {
-  test('renders the heading', () => {
-    render(<CalendarView tasks={[]} />);
-    expect(screen.getByText(/next 30 days/i)).toBeInTheDocument();
+  test('renders the calendar grid', () => {
+    const { container } = render(<CalendarView tasks={[]} />);
+    expect(container.querySelector('.calendar-grid')).toBeInTheDocument();
   });
 
   test('renders a cell for each of the 30 days', () => {
@@ -44,8 +44,8 @@ describe('CalendarView', () => {
   });
 
   test('renders with empty task list without crashing', () => {
-    render(<CalendarView tasks={[]} />);
-    expect(screen.getByText(/next 30 days/i)).toBeInTheDocument();
+    const { container } = render(<CalendarView tasks={[]} />);
+    expect(container.querySelector('.calendar-grid')).toBeInTheDocument();
   });
 
   test('ignores tasks with no dueDate', () => {

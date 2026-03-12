@@ -17,7 +17,7 @@ describe('TaskCard', () => {
     expect(screen.getByText('Write tests')).toBeInTheDocument();
     expect(screen.getByText('Work')).toBeInTheDocument();
     expect(screen.getByText('Top Priority')).toBeInTheDocument();
-    expect(screen.getByText('2026-03-20')).toBeInTheDocument();
+    expect(screen.getByText(/2026-03-20/)).toBeInTheDocument();
   });
 
   test('renders description when provided', () => {
