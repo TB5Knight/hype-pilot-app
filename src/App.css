@@ -871,6 +871,10 @@
   background: var(--gray-100);
 }
 
+.dash-task-item.priority-top { border-left: 3px solid var(--orange);     padding-left: 9px; }
+.dash-task-item.priority-mid { border-left: 3px solid var(--blue);       padding-left: 9px; }
+.dash-task-item.priority-low { border-left: 3px solid var(--green-dark); padding-left: 9px; }
+
 .dash-task-dot {
   width: 8px;
   height: 8px;

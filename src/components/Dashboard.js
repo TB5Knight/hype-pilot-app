@@ -51,7 +51,7 @@ export default function Dashboard({ tasks, onNavigate }) {
       .filter(t => !t.completed && t.dueDate && t.dueDate >= today)
       .sort((a, b) => a.dueDate.localeCompare(b.dueDate))
       .slice(0, 5);
-  }, [tasks]);
+  }, [tasks, today]);
 
   const pct = (n) => (stats.total > 0 ? Math.round((n / stats.total) * 100) : 0);
 
@@ -167,15 +167,15 @@ export default function Dashboard({ tasks, onNavigate }) {
         <div className="dash-section dash-actions">
           <h3 className="dash-section-title">Quick Actions</h3>
           <div className="quick-actions">
-            <button className="qa-btn qa-primary" onClick={() => onNavigate('Add Task')}>
+            <button type="button" className="qa-btn qa-primary" onClick={() => onNavigate('Add Task')}>
               <span className="qa-icon">+</span>
               <span>Add New Task</span>
             </button>
-            <button className="qa-btn qa-secondary" onClick={() => onNavigate('Tasks')}>
+            <button type="button" className="qa-btn qa-secondary" onClick={() => onNavigate('Tasks')}>
               <span className="qa-icon">✓</span>
               <span>View All Tasks</span>
             </button>
-            <button className="qa-btn qa-secondary" onClick={() => onNavigate('Calendar')}>
+            <button type="button" className="qa-btn qa-secondary" onClick={() => onNavigate('Calendar')}>
               <span className="qa-icon">▦</span>
               <span>Open Calendar</span>
             </button>
@@ -201,7 +201,7 @@ export default function Dashboard({ tasks, onNavigate }) {
               </li>
             ))}
           </ul>
-          <button className="dash-view-all" onClick={() => onNavigate('Tasks')}>
+          <button type="button" className="dash-view-all" onClick={() => onNavigate('Tasks')}>
             View all tasks →
           </button>
         </div>
@@ -210,7 +210,7 @@ export default function Dashboard({ tasks, onNavigate }) {
       {tasks.length === 0 && (
         <div className="dash-empty">
           <p>No tasks yet — get started by adding your first task.</p>
-          <button className="btn-primary" onClick={() => onNavigate('Add Task')}>
+          <button type="button" className="btn-primary" onClick={() => onNavigate('Add Task')}>
             + Add a Task
           </button>
         </div>
