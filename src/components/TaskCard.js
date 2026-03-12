@@ -21,34 +21,34 @@ export default function TaskCard({ task, onComplete, onDelete }) {
 
   return (
     <div className={cardClass}>
-      <input
-        type="checkbox"
-        checked={completed}
-        onChange={() => onComplete(id)}
-        aria-label={`Mark "${title}" complete`}
-      />
+      <div className="task-card-top">
+        <input
+          type="checkbox"
+          checked={completed}
+          onChange={() => onComplete(id)}
+          aria-label={`Mark "${title}" complete`}
+        />
+        <span className="task-title">{title}</span>
+      </div>
 
-      <div className="task-body">
-        <div className="task-card-header">
-          <span className="task-title">{title}</span>
-          {category && (
-            <span className="badge badge-category">{category}</span>
-          )}
-          {priority && (
-            <span className={`badge ${PRIORITY_BADGE[priority] || ''}`}>{priority}</span>
-          )}
-        </div>
-
-        <div className="task-meta">
-          <span className="task-date">Due: {dueDate}</span>
-        </div>
-
-        {description && (
-          <p className="task-description">{description}</p>
+      <div className="task-badges">
+        {category && (
+          <span className="badge badge-category">{category}</span>
+        )}
+        {priority && (
+          <span className={`badge ${PRIORITY_BADGE[priority] || ''}`}>{priority}</span>
         )}
       </div>
 
-      <div className="task-actions">
+      <div className="task-meta">
+        <span className="task-date">Due: {dueDate}</span>
+      </div>
+
+      {description && (
+        <p className="task-description">{description}</p>
+      )}
+
+      <div className="task-footer">
         <button className="btn-danger" onClick={() => onDelete(id)}>Delete</button>
       </div>
     </div>

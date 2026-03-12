@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 import App from './App';
 
 test('renders navbar brand', () => {
@@ -8,7 +8,9 @@ test('renders navbar brand', () => {
 
 test('renders navigation buttons', () => {
   render(<App />);
-  expect(screen.getByRole('button', { name: /tasks/i })).toBeInTheDocument();
-  expect(screen.getByRole('button', { name: /add task/i })).toBeInTheDocument();
-  expect(screen.getByRole('button', { name: /calendar/i })).toBeInTheDocument();
+  const navbar = screen.getByRole('navigation', { name: /^$/i }) || document.querySelector('.navbar');
+  const topNav = document.querySelector('.navbar-links');
+  expect(within(topNav).getByRole('button', { name: 'Tasks' })).toBeInTheDocument();
+  expect(within(topNav).getByRole('button', { name: 'Add Task' })).toBeInTheDocument();
+  expect(within(topNav).getByRole('button', { name: 'Calendar' })).toBeInTheDocument();
 });

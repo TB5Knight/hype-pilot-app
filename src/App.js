@@ -8,7 +8,12 @@ import CalendarView from './components/CalendarView';
 import ReminderBanner from './components/ReminderBanner';
 
 const DEFAULT_FILTERS = { priority: 'All', category: 'All', status: 'All' };
-const VIEWS = ['Tasks', 'Add Task', 'Calendar'];
+
+const VIEWS = [
+  { id: 'Tasks',    label: 'Tasks',    icon: '✓' },
+  { id: 'Add Task', label: 'Add Task', icon: '+' },
+  { id: 'Calendar', label: 'Calendar', icon: '▦' },
+];
 
 function App() {
   const { tasks, addTask, deleteTask, toggleComplete } = useTasks();
@@ -47,17 +52,18 @@ function App() {
 
   return (
     <div className="app-wrapper">
+      {/* Desktop top navbar */}
       <nav className="navbar">
         <div className="navbar-inner">
           <span className="navbar-brand">Hype Pilot</span>
           <div className="navbar-links">
             {VIEWS.map(v => (
               <button
-                key={v}
-                className={`nav-btn${view === v ? ' active' : ''}`}
-                onClick={() => setView(v)}
+                key={v.id}
+                className={`nav-btn${view === v.id ? ' active' : ''}`}
+                onClick={() => setView(v.id)}
               >
-                {v}
+                {v.label}
               </button>
             ))}
           </div>
@@ -93,6 +99,21 @@ function App() {
           </>
         )}
       </main>
+
+      {/* Mobile bottom tab bar (visible only on small screens via CSS) */}
+      <nav className="bottom-nav" aria-label="Mobile navigation">
+        {VIEWS.map(v => (
+          <button
+            key={v.id}
+            className={`bottom-nav-btn${view === v.id ? ' active' : ''}`}
+            onClick={() => setView(v.id)}
+            aria-current={view === v.id ? 'page' : undefined}
+          >
+            <span className="nav-icon">{v.icon}</span>
+            {v.label}
+          </button>
+        ))}
+      </nav>
     </div>
   );
 }
