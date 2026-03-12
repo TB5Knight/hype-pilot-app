@@ -181,6 +181,18 @@
   transition: border-color var(--transition), box-shadow var(--transition);
   outline: none;
   width: 100%;
+  box-sizing: border-box;
+}
+
+/* Date input: prevent native browser chrome from overflowing on mobile */
+.form-group input[type="date"] {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  appearance: none;
+  -webkit-appearance: none;
+  padding-right: 10px;
 }
 
 .form-group input:focus,
@@ -631,8 +643,15 @@
   .form-group select,
   .form-group textarea {
     font-size: 1rem;
-    padding: 12px 14px;
+    padding: 12px 10px;
     min-height: 48px;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .form-group input[type="date"] {
+    padding-right: 6px;
+    font-size: 0.95rem;
   }
 
   /* Full-width form on mobile */
