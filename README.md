@@ -43,7 +43,7 @@ pilot/i }) to scope the  query to the heading element specifically
 - Bug 1: PRIORITY_CLASS in TaskCard.js (lines 1–5) is dead code — identical to CARD_BORDER but never used. Fix
 1 — dead code in TaskCard.js
 - Bug 2: Stale category filter — deleting the last task in a category removes it from the dropdown but filters
-category still holds the old value, so  filteredTasks silently returns 0 results. Fix 2 — trim title in useTasks
+category still holds the old value, so  filteredTasks silently returns 0 results. Fix 2 — trim title in useTasks.
 js
 - Bug 3: addTask stores the untrimmed title — form validates .trim() but passes
 the raw string to addTask. Fix 3 — stale category filter reset in App.js
