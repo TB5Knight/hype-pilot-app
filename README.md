@@ -33,20 +33,26 @@ The application will be deployed using Netlify or Vercel.
 - Build and test each phase before moving to the next. This keeps the app   functional at every step and makes bugs easy to isolate.
 
 ## bugs or limitations
-- Bug 1 — crypto.randomUUID() not available in Jest/jsdom Fixed by replacing it with Date.now().toString(36) +
-Math.random().toString(36).slice(2
-- Bug 2 — getByText matched multiple elements in App test. Fixed by using getByRole('heading', { name: /hype
-pilot/i }) to scope the  query to the heading element specifically
-- Bug: CalendarView heading tests failed Fix: Updated tests to query .calendar-grid instead
-- Bug: App heading test failed Fix: Updated test to use getByText and check nav buttons
-- Bug: TaskCard date assertion failed Fix: Updated to regex /2026-03-20/
-- Bug 1: PRIORITY_CLASS in TaskCard.js (lines 1–5) is dead code — identical to CARD_BORDER but never used. Fix
-1 — dead code in TaskCard.js
-- Bug 2: Stale category filter — deleting the last task in a category removes it from the dropdown but filters
-category still holds the old value, so  filteredTasks silently returns 0 results. Fix 2 — trim title in useTasks.
-js
-- Bug 3: addTask stores the untrimmed title — form validates .trim() but passes
-the raw string to addTask. Fix 3 — stale category filter reset in App.js
+- Jest UUID issue: crypto.randomUUID() not available in Jest/jsdom.
+Fix: Replaced with Date.now().toString(36) + Math.random().toString(36).slice(2).
+
+- App test query conflict: getByText matched multiple elements. 
+Fix: Used getByRole('heading', { name: /hype pilot/i }) to target the heading.
+
+- CalendarView heading test failure: Fix: Updated tests to query .calendar-grid.
+
+- App heading test failure: Fix: Updated test to use getByText and verify navigation buttons.
+
+- TaskCard date assertion failure: Fix: Updated assertion to use regex /2026-03-20/.
+
+- Dead code in TaskCard.js: PRIORITY_CLASS (lines 1–5) duplicates CARD_BORDER and is unused.
+Fix: Removed dead code.
+
+- Untrimmed task titles: addTask stored titles without trimming even though the form validated .trim(). 
+Fix: Trim title in useTasks.js.
+
+- Stale category filter: Deleting the last task in a category removes it from the dropdown, but the filter still
+holds the old value, returning 0 results. Fix: Reset stale category filter in App.js.
 
 ## What I learned
 I learned that testing my design myself after running AI-generated tests on the code is important in case the AI
