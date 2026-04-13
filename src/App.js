@@ -1,5 +1,11 @@
 import { useState, useMemo, useEffect } from 'react';
+import { Routes, Route, useNavigate } from 'react-router-dom';
 import './App.css';
+import { useAuth } from './context/AuthContext';
+import ProtectedRoute from './components/ProtectedRoute';
+import GuestRoute from './components/GuestRoute';
+import Login from './components/auth/Login';
+import SignUp from './components/auth/SignUp';
 import useTasks from './hooks/useTasks';
 import TaskForm from './components/TaskForm';
 import TaskList from './components/TaskList';
@@ -17,8 +23,11 @@ const VIEWS = [
   { id: 'Calendar',  label: 'Calendar', icon: '▦' },
 ];
 
-function App() {
-  const { tasks, addTask, deleteTask, toggleComplete } = useTasks();
+// The main app shell — only rendered when the user is authenticated
+function AppShell() {
+  const { user, signOut } = useAuth();
+  const navigate = useNavigate();
+  const { tasks, tasksLoading, taskError, addTask, deleteTask, toggleComplete } = useTasks();
   const [filters, setFilters] = useState(DEFAULT_FILTERS);
   const [view, setView] = useState('Dashboard');
 
@@ -29,6 +38,11 @@ function App() {
   function handleAddTask(task) {
     addTask(task);
     setView('Tasks');
+  }
+
+  async function handleSignOut() {
+    await signOut();
+    navigate('/login');
   }
 
   const categories = useMemo(
@@ -69,14 +83,29 @@ function App() {
               </button>
             ))}
           </div>
+          <div className="navbar-user">
+            <span className="navbar-email">{user.email}</span>
+            <button className="nav-btn signout-btn" onClick={handleSignOut}>
+              Sign out
+            </button>
+          </div>
         </div>
       </nav>
 
       <main className="app-main">
         <ReminderBanner tasks={tasks} />
 
+        {/* Surface any Supabase write/read error as a dismissible banner */}
+        {taskError && (
+          <div className="task-error-banner" role="alert">
+            {taskError}
+          </div>
+        )}
+
         {view === 'Dashboard' && (
-          <Dashboard tasks={tasks} onNavigate={setView} />
+          tasksLoading
+            ? <div className="tasks-loading">Loading your tasks…</div>
+            : <Dashboard tasks={tasks} onNavigate={setView} />
         )}
 
         {view === 'Add Task' && (
@@ -89,19 +118,28 @@ function App() {
         {view === 'Tasks' && (
           <>
             <h2 className="section-heading">My Tasks</h2>
-            <FilterBar
-              filters={filters}
-              onFilterChange={handleFilterChange}
-              categories={categories}
-            />
-            <TaskList tasks={filteredTasks} onComplete={toggleComplete} onDelete={deleteTask} />
+            {tasksLoading ? (
+              <div className="tasks-loading">Loading your tasks…</div>
+            ) : (
+              <>
+                <FilterBar
+                  filters={filters}
+                  onFilterChange={handleFilterChange}
+                  categories={categories}
+                />
+                <TaskList tasks={filteredTasks} onComplete={toggleComplete} onDelete={deleteTask} />
+              </>
+            )}
           </>
         )}
 
         {view === 'Calendar' && (
           <>
             <h2 className="section-heading">Calendar</h2>
-            <CalendarView tasks={tasks} />
+            {tasksLoading
+              ? <div className="tasks-loading">Loading your tasks…</div>
+              : <CalendarView tasks={tasks} />
+            }
           </>
         )}
       </main>
@@ -124,4 +162,24 @@ function App() {
   );
 }
 
-export default App;
+export default function App() {
+  return (
+    <Routes>
+      {/* Auth pages — redirect to "/" if already logged in */}
+      <Route
+        path="/login"
+        element={<GuestRoute><Login /></GuestRoute>}
+      />
+      <Route
+        path="/signup"
+        element={<GuestRoute><SignUp /></GuestRoute>}
+      />
+
+      {/* Protected app — redirect to "/login" if not logged in */}
+      <Route
+        path="/*"
+        element={<ProtectedRoute><AppShell /></ProtectedRoute>}
+      />
+    </Routes>
+  );
+}
