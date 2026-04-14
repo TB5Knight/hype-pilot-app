@@ -15,6 +15,10 @@ in a calendar layout, and mark tasks as completed.
 - Reminder alerts
 - Local storage persistence
 
+## Week 12 Excercise feature
+- Option B: Authentication
+- I used Supabase for authentication and database management. This allowed users to securely access their own tasks instead of working in a  shared or temporary environment. Users just have to create an account with ther email and password and will recieve a comfirmation email. 
+
 ## Technology Used
 - React
 - JavaScript
