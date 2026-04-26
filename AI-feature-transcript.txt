@@ -1530,8 +1530,8 @@ tasks with the correct user_id, and managing state cleanly in a React frontend,
 ✻ Crunched for 5m 21s
 
 ❯ I'm getting this error when initializing Supabase:                            
-Uncaught Error: supabaseUrl is required, at helpers.ts:86:11, at new            
-SupabaseClient (SupabaseClient.ts:284:21), at index.ts:65:10 ,at                
+Uncaught Error: supabaseUrl is required,at helpers.ts:86:11, at new            
+SupabaseClient (SupabaseClient.ts:284:21), at index.ts:65:10,at                
 supabaseClient.js:6:25                                                          
 Can you help me debug why supabaseUrl is undefined and guide me through fixing  
 my environment variables?                                                       
@@ -1634,7 +1634,7 @@ my environment variables?
 ❯ I'm getting this error in my React app: Uncaught Error: Missing Supabase      
 environment variables. Make sure REACT_APP_SUPABASE_URL and                     
 REACT_APP_SUPABASE_ANON_KEY are set in .env.local and that you restarted the    
-dev server after editing the file. Stack trace: at supabaseClient.js:7:9 at     
+dev server after editing the file. Stack trace: at supabaseClient.js:7:9at     
 main.68fd5d06.js:2:469195 Can you help me debug why my Supabase environment     
 variables are not being picked up and how to fix my setup?                      
 
